@@ -1,0 +1,102 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1c1f26;
+    color: #f0f0f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #2b2b2b;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+    color: #ffcc66;
+    font-size: 17px;
+    text-transform: uppercase;
+    margin: 0;
+    text-align: center;
+}
+
+h2{
+     font-family: 'Press Start 2P', cursive;
+     color: #cea146;
+}
+
+h1>em{
+    font-size: 150%;
+}
+
+p>em{
+    gap: 10px;
+    font-size: 80%;
+    font-family: 'Press Start 2P', cursive;
+    color: rgb(255, 255, 255);
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+p {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+a {
+    color: #66d9ef;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+img{
+    width: 300px;
+    height: auto;
+     display: block; 
+     margin: 0 auto;
+}
+
+.personagens {
+    width: 100px;
+    height: auto;
+    display: inline;
+    margin: 0;
+}
+
+dd {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+dd > img {
+    width: 250px;
+    height: auto;
+    display: block;
+    margin-bottom: 0;
+    float: none;
+    clear: none;
+    grid-column: 2;
+    grid-row: 2 / 5;
+}
+
+dd > :not(img) {
+    grid-column: 1;
+}
