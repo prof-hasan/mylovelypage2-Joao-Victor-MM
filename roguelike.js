@@ -82,7 +82,7 @@ function comecar() {
     }
 
     // Atualiza XP inicialmente
-    atualizarXP();
+    setInterval(atualizarXP(), 1000);
 
     function checarColisao() {
         if (invulneravel) return;
@@ -225,33 +225,89 @@ function comecar() {
         inimigo.style.left = Math.random() * (window.innerWidth - 40) + 'px';
         inimigo.style.top = Math.random() * (window.innerHeight - 40) + 'px';
         container.appendChild(inimigo);
-        // intervalo de geração de inimigos, diminui toda vez que um inimigo nasce
-        let inimigos =  document.querySelectorAll('.inimigo');
-        setInterval(() => {intervalo -= (intervalo - inimigos.length)/50}, intervalo);
+        setInterval(() => {intervalo -= intervalo/50}, intervalo);
     }
 
     if(timerDiv.textContent === '05:00'){
         desafio = Math.floor(Math.random() * 5);
         switch(desafio){
             case 0:
-                alert('Você encontrou a Relíquia do desafio! inimigos agora causam o triplo de dano, tem o dobro de vida,e aparecem 4x mais rápido, mas dropam 4x mais XP, são mais lentos, e o tempo está pela metade');
+                alert('Você encontrou a Relíquia do desafio! inimigos agora causam o triplo de dano, tem o dobro de vida,e aparecem 3x mais rápido, mas dropam 4x mais XP, são mais lentos, e o tempo está pela metade');
                 vidamaxInimigo *= 2;
                 velInimigo /= 2;
                 dropXP *= 4;
                 tempoRestante = 2.5 * 60;
                 danoI *= 3;
-                debuff = 4;
+                debuff = 3;
                 break;
             default:
                 break;
         }
+    }   
+
+
+    // intervalo de geração de inimigos, diminui toda vez que um inimigo nasce
+    let intervalo = 4000 / debuff
+    setInterval(spawnInimigo, intervalo);
+
+    function status(){
+        const statusDiv = document.createElement('div');
+        statusDiv.id = 'statusDiv';
+        statusDiv.style.position = 'fixed';
+        statusDiv.style.top = '50px';
+        statusDiv.style.left = '20px';
+        statusDiv.style.background = 'rgba(0, 0, 0, .5)';
+        statusDiv.style.color = '#fff';
+        statusDiv.style.padding = '10px 20px';
+        statusDiv.style.width = '400px'
+        statusDiv.style.borderRadius = '10px';
+        statusDiv.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+        document.body.appendChild(statusDiv);
     }
 
+    //Status com a tecla esc
+    let statusAtivo = false;
 
-    
-    let intervalo = 4000 / debuff;
-    setInterval(spawnInimigo, intervalo);
-    
+    //status
+    // atualiza o status a cada segundo se estiver ativo
+    setInterval(() => {
+        if(statusAtivo){
+            const statusDiv = document.getElementById('statusDiv');
+            if (statusDiv) {
+                statusDiv.innerHTML = "<em>Status:</em><br>" +
+                `Vida: ${vida.toFixed(1)} / ${vidamax}<br>` +
+                `Dano: ${dmg}<br>` +
+                `Perfuração: ${perf}<br>` +
+                `Velocidade: ${speed}<br>` +
+                `Vida Inimiga: ${vidamaxInimigo}<br>` +
+                `Velocidade Inimiga: ${velInimigo}<br>` +
+                `Intervalo de Tiro: ${intAtirar} ms<br>` +
+                `Invulnerabilidade: ${invulTempo} ms<br>` +
+                `XP: ${XP} / ${XPparaNivel}<br>` +
+                `XP Drop: ${dropXP}<br>` +
+                `Roubo de Vida: ${HProubo}<br>` +
+                `Vida Recuperada ao Subir de Nível: ${recover}<br>` +
+                `Dano Inimigo: ${danoI}<br>` +
+                `Tempo de nascimento inimigo: ${(intervalo/1000).toFixed(1)}s<br>`;
+                
+            }
+        }
+    }, 100);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (!statusAtivo) {
+                status();
+                statusAtivo = true;
+            } else {
+                const statusDiv = document.getElementById('statusDiv');
+                if (statusDiv) {
+                    statusDiv.remove();
+                }
+                statusAtivo = false;
+            }
+        }
+    })
 
     // inimigos seguindo o personagem
     function moverInimigos() {
@@ -355,7 +411,7 @@ function comecar() {
                         if (vida < vidamax) {
                             vida += parseFloat(Math.random().toFixed(1) * HProubo.toFixed(1));
                             if (vida > vidamax) vida = vidamax; // não ultrapassa a vida máxima
-                            personagem.textContent = vida; // Atualiza a vida exibida
+                            personagem.textContent = vida.toFixed(1); // Atualiza a vida exibida
                         }
                     } else {
                         inimigo.dataset.vida = vidaInimigoAtual;
@@ -405,7 +461,7 @@ function comecar() {
 
     function subirNivel() {
         if (XP >= XPparaNivel) {
-            XP = 0;
+            XP -= XPparaNivel;//possibilita subir mais de um nível por vez
             XPparaNivel = Math.floor(XPparaNivel * 1.5); // aumenta a XP necessária para o próximo nível
             let randomizar = Math.floor(Math.random() * 12);
             if(vida < vidamax){
