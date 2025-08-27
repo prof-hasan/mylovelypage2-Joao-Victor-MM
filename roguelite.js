@@ -1,3 +1,158 @@
+// atributos
+let vidamax = 3; // vida máxima
+let vida = vidamax;
+let dmg = 1.0; // dano
+let perf = 1; // quantos inimigos o tiro pode acertar
+let speed = 4; // velocidade do personagem
+let vidamaxInimigo = 2; // vida máxima do inimigo
+let vidaInimigo = vidamaxInimigo; // vida do inimigo
+let velInimigo = 2; // velocidade do inimigo
+let intAtirar = 1000; // intervalo de tiro em ms
+let invulTempo = 1000; // tempo de invulnerabilidade em ms
+let XP = 0; // experiência
+let XPparaNivel = 5; // experiência necessária para subir de nível
+let dropXP = 3; // XP máximo que um inimigo pode dropar
+let HProubo = 0 // quantidade maxima de vida que pode ser roubada por inimigo
+let recover = 0.5; // vida recuperada ao subir de nível
+let danoI = 1; // dano que o inimigo causa ao personagem
+let debuff = 1; // multiplicador de dificuldade
+let tamanahoTiro = 10; // tamanho do tiro
+let tempo = 20; // tempo em minutos
+let Cura = 0; //quantidade curada por item, se 0 = sem item
+let dinheiro = 0;//dinheiro gasto fora do jogo
+let Ganhar = 1;//Dinheiro Ganho ao matar um inimigo
+let instUp = 0; //niveis ja ganhos no inicio    
+
+let precos =[50, 20, 100, 100, 90, 200];
+let niveis = [0, 0, 0, 0, 0, 0]; // nível atual de cada upgrade
+let nivelMax = [20, 50, 15, 3, 5, 5]; // nível máximo de cada upgrade
+const upgrades = document.querySelectorAll('.upgrade'); 
+let tipo = ['Dinheiro ganho', 'Intervalo de Tiro', 'Tempo', 'Tamanho do projetil', 'Itens de Cura', 'Níveis instantâneos'];
+
+function aplicarUpgradesSalvos() {
+    niveis.forEach((nivel, index) => {
+        if (nivel >= 0) {
+            // Aplique os efeitos permanentes de acordo com o tipo do upgrade
+            switch(index) {
+                case 0: // Dinheiro ganho
+                    Ganhar += nivel * 5;
+                    break;
+                case 1://Intervalo de Tiro
+                    intAtirar -= nivel * 10;
+                    break;
+                case 2: // Tempo
+                    tempo -= nivel;
+                    break;
+                case 3: // Tamanho do projetil
+                    tamanahoTiro += 10 * nivel;
+                    break;
+                case 4: // Itens de Cura
+                    Cura += nivel;
+                    break;
+                case 5: // Níveis instantâneos
+                    instUp += nivel;
+                    break;
+            }
+        }
+    });
+}
+
+
+// Tenta recuperar dados salvos
+if (localStorage.getItem('niveis')) {
+    niveis = JSON.parse(localStorage.getItem('niveis'));
+}
+if (localStorage.getItem('precos')) {
+    precos = JSON.parse(localStorage.getItem('precos'));
+}
+if (localStorage.getItem('dinheiro')) {
+    dinheiro = parseInt(localStorage.getItem('dinheiro'));
+}
+
+function salvarProgresso() {
+    localStorage.setItem('niveis', JSON.stringify(niveis));
+    localStorage.setItem('precos', JSON.stringify(precos));
+    localStorage.setItem('dinheiro', dinheiro);
+}
+
+aplicarUpgradesSalvos()
+
+
+upgrades.forEach((botao, upgrade) => {
+    botao.innerHTML = `${tipo[upgrade]} <br><br> Nível ${niveis[upgrade]}/${nivelMax[upgrade]} <br> $${precos[upgrade]}`;
+
+    botao.addEventListener('click', ()=>{
+            if(niveis[upgrade] < nivelMax[upgrade]){
+                if(dinheiro >= precos[upgrade]){
+                    dinheiro -= precos[upgrade];
+                    niveis[upgrade] ++;
+
+                    atualizarDinheiro();
+                    salvarProgresso();
+
+                    switch(upgrade) {
+                        case 0: // Dinheiro ganho
+                            Ganhar += 5 ;
+                            precos[upgrade] += 50;
+                            break;
+                        case 1://Intervalo de Tiro
+                            intAtirar -=10;
+                            precos[upgrade] += 50;
+                            break;
+                        case 2: // Tempo
+                            tempo -= 1;
+                            precos[upgrade] += 200;
+                            break;
+                        case 3: // Tamanho do projetil
+                            tamanahoTiro += 10;
+                            precos[upgrade] += 100;
+                            break;
+                        case 4: // Itens de Cura
+                            Cura += 1;
+                            precos[upgrade] += 50;
+                            break;
+                        case 5: // Níveis instantâneos
+                            instUp += 1;
+                            precos[upgrade] += 400;
+                            break;
+                    }
+
+                    botao.innerHTML = `${tipo[upgrade]} <br> <br> <p>Nível ${niveis[upgrade]}/${nivelMax[upgrade]} <br> $${precos[upgrade]}</p>`;
+                    
+                    
+                }
+            }else if(niveis[upgrade] === nivelMax[upgrade]){
+                botao.innerHTML = `${tipo[upgrade]} <br> Nível Max.`;
+            }
+    })
+});
+
+// Cria o menu de dinheiro
+const abaDinheiro = document.createElement('div');
+abaDinheiro.id = 'aba-dinheiro';
+abaDinheiro.style.position = 'fixed';
+abaDinheiro.style.top = '50px';
+abaDinheiro.style.right = '10px';
+abaDinheiro.style.backgroundColor = '#181616ff';
+abaDinheiro.style.color = '#fff';
+abaDinheiro.style.padding = '10px 15px';
+abaDinheiro.style.borderRadius = '8px';
+abaDinheiro.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 1)';
+abaDinheiro.style.fontFamily = 'Arial, sans-serif';
+abaDinheiro.style.fontSize = '16px';
+abaDinheiro.style.zIndex = '9999';
+abaDinheiro.style.userSelect = 'none';
+abaDinheiro.innerText = `Dinheiro: $${dinheiro}`;
+
+document.body.appendChild(abaDinheiro);
+
+function atualizarDinheiro() {
+    abaDinheiro.innerText = `Dinheiro: $${dinheiro}`;
+}
+
+
+
+
 function comecar() {
     let podeAtirar = true;
 
@@ -31,25 +186,6 @@ function comecar() {
 
     container.appendChild(personagem);
     document.body.appendChild(container);
-
-    // atributos
-    let vidamax = 3; // vida máxima
-    let vida = vidamax;
-    let dmg = 1.0; // dano
-    let perf = 1; // quantos inimigos o tiro pode acertar
-    let speed = 4; // velocidade do personagem
-    let vidamaxInimigo = 2; // vida máxima do inimigo
-    let vidaInimigo = vidamaxInimigo; // vida do inimigo
-    let velInimigo = 2; // velocidade do inimigo
-    let intAtirar = 1000; // intervalo de tiro em ms
-    let invulTempo = 1000; // tempo de invulnerabilidade em ms
-    let XP = 0; // experiência
-    let XPparaNivel = 5; // experiência necessária para subir de nível
-    let dropXP = 3; // XP máximo que um inimigo pode dropar
-    let HProubo = 0 // quantidade maxima de vida que pode ser roubada por inimigo
-    let recover = 0; // vida recuperada ao subir de nível
-    let danoI = 1; // dano que o inimigo causa ao personagem
-    let debuff = 1; // multiplicador de dificuldade
 
     // movimentação
     let posX = window.innerWidth / 2 - 25;
@@ -85,7 +221,8 @@ function comecar() {
     setInterval(atualizarXP(), 1000);
 
     function checarColisao() {
-        if (invulneravel) return;
+        if (invulneravel) 
+            return;
         const inimigos = document.querySelectorAll('.inimigo');
         const PosPersonagem = personagem.getBoundingClientRect();
         inimigos.forEach(inimigo => {
@@ -116,6 +253,54 @@ function comecar() {
         });
     }
 
+    function Curar() {
+        if (Cura === 0) return;
+
+        for (let i = 0; i < Cura; i++) {
+            const heal = document.createElement('div');
+            heal.className = 'curar';
+            heal.style.width = '20px';
+            heal.style.height = '20px';
+            heal.style.background = 'rgba(1, 71, 4, 1)';
+            heal.style.borderRadius = '50%';
+            heal.style.position = 'absolute';
+
+            // Posição aleatória
+            heal.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+            heal.style.top = Math.random() * (window.innerHeight - 40) + 'px';
+
+            container.appendChild(heal);
+        }
+    }
+
+    // Chama Curar a cada 10 segundos 
+    setInterval(Curar, 10000);
+
+    function checarCura() {
+        const heals = document.querySelectorAll('.curar');
+        const PosPersonagem = personagem.getBoundingClientRect();
+
+        heals.forEach(heal => {
+            const PosHeal = heal.getBoundingClientRect();
+
+            // checa a colisão do personagem com o heal
+            if (
+                PosPersonagem.left < PosHeal.right &&
+                PosPersonagem.right > PosHeal.left &&
+                PosPersonagem.top < PosHeal.bottom &&
+                PosPersonagem.bottom > PosHeal.top
+            ) {
+                if (vida < vidamax) {
+                    vida += 1; // cura
+                    if(vida > vidamax){
+                        vida -= vida - vidamax;
+                    }
+                }
+                heal.remove(); // remove o elemento de cura
+            }
+        });
+    }
+
     function moviment() {
         let dx = 0,
             dy = 0;
@@ -135,8 +320,9 @@ function comecar() {
             posY = Math.max(0, Math.min(window.innerHeight - 50, posY));
             personagem.style.left = posX + 'px';
             personagem.style.top = posY + 'px';
-            personagem.textContent = vida;
+            personagem.textContent = vida.toFixed(1);
         }
+        checarCura();
         checarColisao();
         requestAnimationFrame(moviment);
     }
@@ -152,7 +338,7 @@ function comecar() {
     
 
     // Timer regressivo centralizado no topo
-    let tempoRestante = 5 * 60; // 5 minutos
+    let tempoRestante = tempo * 60; // X minutos
     const timerDiv = document.createElement('div');
     timerDiv.style.position = 'fixed';
     timerDiv.style.left = '50%';
@@ -182,6 +368,7 @@ function comecar() {
                     alert('Você encontrou a Relíquia da experiência! Xp para subir de nível necessário dividido por 2.');
                     XPparaNivel = Math.floor(XPparaNivel / 2);
                     atualizarXP();
+                    subirNivel();
                     break;
                 case 2:
                     alert('Você encontrou a Relíquia do sacerdore! Inimigos agora demoram 10% mais para nascer.');
@@ -201,9 +388,13 @@ function comecar() {
     }
     atualizarTimer();
 
-    
+    //intervalo de spanw de inimigo
+    let intervalo = 10000/debuff;
+    let intervaloMin = 500;
+    let reducao = 0.95;
 
-    // inimigo
+
+    //spawnar inimigo
     function spawnInimigo() {
         const inimigo = document.createElement('div');
         inimigo.dataset.vida = vidamaxInimigo; // vida individual do inimigo
@@ -225,8 +416,12 @@ function comecar() {
         inimigo.style.left = Math.random() * (window.innerWidth - 40) + 'px';
         inimigo.style.top = Math.random() * (window.innerHeight - 40) + 'px';
         container.appendChild(inimigo);
-        setInterval(() => {intervalo -= intervalo/50}, intervalo);
+        
+        intervalo = Math.max(intervaloMin, intervalo * reducao);
+        setTimeout(spawnInimigo,intervalo);
     }
+
+    spawnInimigo();
 
     if(timerDiv.textContent === '05:00'){
         desafio = Math.floor(Math.random() * 5);
@@ -246,9 +441,6 @@ function comecar() {
     }   
 
 
-    // intervalo de geração de inimigos, diminui toda vez que um inimigo nasce
-    let intervalo = 4000 / debuff
-    setInterval(spawnInimigo, intervalo);
 
     function status(){
         const statusDiv = document.createElement('div');
@@ -341,6 +533,7 @@ function comecar() {
         velInimigo +=0.5;
         danoI += 1;
         vidaInimigo = vidamaxInimigo;
+        dropXP += 2;
     }
     setInterval(promoverInimigo, 60000); // aumenta a dificuldade a cada 60 segundos
 
@@ -351,7 +544,8 @@ function comecar() {
         const tiro = document.createElement('div');
         tiro.className = 'tiro';
         tiro.style.width = '10px';
-        tiro.style.height = '10px';
+        tiro.style.height = tamanahoTiro + 'px';
+        tiro.style.width = tamanahoTiro + 'px';
         tiro.style.background = '#ff0';
         tiro.style.borderRadius = '50%';
         tiro.style.position = 'absolute';
@@ -404,6 +598,9 @@ function comecar() {
 
                     if (vidaInimigoAtual <= 0) {
                         inimigo.remove();
+                        dinheiro += Ganhar;
+                        atualizarDinheiro();
+                        salvarProgresso();
                         XP += Math.floor(Math.random() * 3) + dropXP;
                         atualizarXP();  // Atualiza XP na tela
                         subirNivel();   // Verifica se sobe de nível
@@ -459,90 +656,99 @@ function comecar() {
     }
     window.addEventListener('click', atirar);
 
+    function aleatorizarStatus(){
+        let randomizar = Math.floor(Math.random() * 12);
+        switch (randomizar) {
+            case 0:
+                vidamax++;
+                vida++;
+                alert('Vida máxima aumentada em 1! Vida atual: ' + vidamax);
+                break;
+            case 1:
+                dmg++;
+                alert('Dano aumentado em 1! Dano atual: ' + dmg);
+                break;
+            case 2:
+                perf++;
+                alert('Perfuração aumentada em 1! Perfuração atual: ' + perf);
+                break;
+            case 3:
+                speed += 0.5;
+                speed = parseFloat(speed.toFixed(1));
+                alert('Velocidade aumentada em 0.5! Velocidade atual: ' + speed);
+                break;
+            case 4:
+                if (velInimigo > 0.5){
+                    velInimigo -= 0.2;
+                    velInimigo = parseFloat(velInimigo.toFixed(1));
+                    alert('Velocidade inimiga diminuída em 0.2! Velocidade inimiga atual: ' +velInimigo);
+                }else{
+                    alert('Velocidade inimiga já está no mínimo!');
+                }
+                break;
+            case 5:
+                intAtirar -= intAtirar / 10;
+                intAtirar = parseFloat(intAtirar.toFixed(1));
+                alert(
+                    'Intervalo de tiro diminuído em 10%! Intervalo atual: ' +intAtirar +'ms'
+                    );
+                break;
+            case 6:
+                invulTempo += invulTempo / 10;
+                invulTempo = parseFloat(invulTempo.toFixed(1));
+                alert('Tempo de invulnerabilidade aumentado em 10%! Tempo atual: ' + invulTempo +'ms');
+                break;
+            case 7:
+                if (vidamaxInimigo > 1){
+                    vidamaxInimigo--;
+                    alert('Vida máxima dos inimigos diminuida em 1! Vida inimigos atual: ' + vidamaxInimigo);
+                    break;
+                }else{
+                    alert('Vida máxima dos inimigos já está no mínimo!');
+                    break;
+                }
+            case 8:
+                dropXP++;
+                alert('XP drop aumentada em 1! XP drop atual: ' + dropXP);
+                break;
+            case 9:
+                recover += 0.5;
+                recover = parseFloat(recover.toFixed(1));
+                alert('Vida recuperada ao subir de nível aumentada em 0.5! Vida recuperada: ' + recover);
+                break;
+            case 10:
+                HProubo += 0.2;
+                HProubo = parseFloat(HProubo.toFixed(1));
+                alert('Roubo de Vida aumentado em 0.2! Roubo de vida: ' + HProubo);
+                break;
+            case 11:
+                if (danoI > 1){
+                    danoI--;
+                    alert('Dano inimigo diminuído em 1! Dano inimigo atual: ' + danoI);
+                }else{
+                    alert('Dano inimigo já está no mínimo!');
+                }
+            }
+        }
+
     function subirNivel() {
         if (XP >= XPparaNivel) {
             XP -= XPparaNivel;//possibilita subir mais de um nível por vez
             XPparaNivel = Math.floor(XPparaNivel * 1.5); // aumenta a XP necessária para o próximo nível
-            let randomizar = Math.floor(Math.random() * 12);
             if(vida < vidamax){
                 vida += recover;
             }
             if (vida > vidamax) {
                 vida = vidamax;
             }
-
-            switch (randomizar) {
-                case 0:
-                    vidamax++;
-                    vida++;
-                    alert('Vida máxima aumentada em 1! Vida atual: ' + vidamax);
-                    break;
-                case 1:
-                    dmg++;
-                    alert('Dano aumentado em 1! Dano atual: ' + dmg);
-                    break;
-                case 2:
-                    perf++;
-                    alert('Perfuração aumentada em 1! Perfuração atual: ' + perf);
-                    break;
-                case 3:
-                    speed += 0.5;
-                    speed = parseFloat(speed.toFixed(1));
-                    alert('Velocidade aumentada em 0.5! Velocidade atual: ' + speed);
-                    break;
-                case 4:
-                    if (velInimigo > 0.5){
-                        velInimigo -= 0.2;
-                        velInimigo = parseFloat(velInimigo.toFixed(1));
-                        alert('Velocidade inimiga diminuída em 0.2! Velocidade inimiga atual: ' +velInimigo);
-                    }else{
-                        alert('Velocidade inimiga já está no mínimo!');
-                    }
-                    break;
-                case 5:
-                    intAtirar -= intAtirar / 10;
-                    intAtirar = parseFloat(intAtirar.toFixed(1));
-                    alert(
-                        'Intervalo de tiro diminuído em 10%! Intervalo atual: ' +intAtirar +'ms'
-                        );
-                    break;
-                case 6:
-                    invulTempo += invulTempo / 10;
-                    invulTempo = parseFloat(invulTempo.toFixed(1));
-                    alert('Tempo de invulnerabilidade aumentado em 10%! Tempo atual: ' + invulTempo +'ms');
-                    break;
-                case 7:
-                    if (vidamaxInimigo > 1){
-                        vidamaxInimigo--;
-                        alert('Vida máxima dos inimigos diminuida em 1! Vida inimigos atual: ' + vidamaxInimigo);
-                        break;
-                    }else{
-                        alert('Vida máxima dos inimigos já está no mínimo!');
-                        break;
-                    }
-                case 8:
-                    dropXP++;
-                    alert('XP drop aumentada em 1! XP drop atual: ' + dropXP);
-                    break;
-                case 9:
-                    recover += 0.5;
-                    recover = parseFloat(recover.toFixed(1));
-                    alert('Vida recuperada ao subir de nível aumentada em 0.5! Vida recuperada: ' + recover);
-                    break;
-                case 10:
-                    HProubo += 0.2;
-                    HProubo = parseFloat(HProubo.toFixed(1));
-                    alert('Roubo de Vida aumentado em 0.2! Roubo de vida: ' + HProubo);
-                    break;
-                case 11:
-                    if (danoI > 1){
-                        danoI--;
-                        alert('Dano inimigo diminuído em 1! Dano inimigo atual: ' + danoI);
-                    }else{
-                        alert('Dano inimigo já está no mínimo!');
-                    }
-            }
+            aleatorizarStatus();
             atualizarXP();
         }
+    }  
+
+    for(let i = 0; i < instUp; i++){
+        aleatorizarStatus();
     }
+
+
 }

@@ -371,3 +371,35 @@ button:hover{
 button:active{
     transform: translateY(5px);
 }
+
+#upgradesMenu{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, 1fr);
+    justify-content: center;
+    margin: 16px;
+    width: 100%;
+    height: max-content;
+    background-color: #1f1c1c;
+    place-items: center;
+    border-radius: 10px;
+    box-shadow: 20px 20px 60px #0008, -20px -20px 60px #333;
+}
+
+.upgrade{
+    background-color: #2b2b2b;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    width: 220px;
+    height: 200px;
+    margin-bottom: 16px;
+    color: #f0f0f0;
+}

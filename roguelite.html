@@ -13,7 +13,7 @@
                 <ul>
                     <li><a href="index.html">Início</a></li>
                     <li><a href="sobre.html">Sobre</a></li>
-                    <li><a href="roguelike.html" class="atual">Roguelike</a></li>
+                    <li><a href="roguelikt.html" class="atual">Roguelite</a></li>
                 </ul>
             </nav>
     </header>
@@ -22,15 +22,29 @@
     <main>
         <h2>Começar jogo?</h2>
         <button onclick="comecar()">Começar!</button>
-        <p>esse jogo é apenas uma versão simples, não há mecânicas de roguelite, é apenas um roguelike</p>
         <p>Em caso de bugs, fale comigo, tentarei arrumar futuramente!</p>
 
         <h2>Controles</h2>
         <ul>
             <li><em>W A S D:</em> Controla o personagem;</li>
-            <li><em>Esc:</em> Abrir menu de Status;</li>
+            <li><em>Esc:</em> Abrir menu de Sta tus;</li>
             <li><em>Botão esquerdo do mouse:</em> Atirar na direção do cursor.</li>
         </ul>
+
+        <h2>Objetivo</h2>
+        <p>chegue ao final do jogo, zerando o crônometro, a cada minuto, o jogo fica mais difícil, e para superar seu recorde, compre os Upgrades permanentes abaixo:</p>
+
+        <h2>Upgrades:</h2>
+        <div id="upgradesMenu" >
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+
+            <button class="Resetar" onclick="localStorage.clear(); window.location.reload()">Resetar Progresso</button>
+        </div>
     </main>
 
 
@@ -41,6 +55,6 @@
         </p>
     </footer>
 
-    <script src="roguelike.js"></script>
+    <script src="roguelite.js"></script>
 </body>
 </html>
