@@ -396,6 +396,21 @@ function comecar() {
 
     //spawnar inimigo
     function spawnInimigo() {
+        const personagem = document.getElementById('personagem');
+        const personagemPos = personagem.getBoundingClientRect();
+
+        let posX, posY;
+        let distanciaSegura = 200;
+
+        // Tenta gerar uma posição até que fique a uma distância segura do personagem
+        do {
+            posX = Math.random() * (window.innerWidth - 40);
+            posY = Math.random() * (window.innerHeight - 40);
+        } while (
+            Math.abs(posX - personagemPos.left) < distanciaSegura &&
+            Math.abs(posY - personagemPos.top) < distanciaSegura
+        );
+
         const inimigo = document.createElement('div');
         inimigo.dataset.vida = vidamaxInimigo; // vida individual do inimigo
         inimigo.className = 'inimigo';
@@ -412,14 +427,15 @@ function comecar() {
         inimigo.style.fontSize = '18px';
         inimigo.style.color = '#cfcfcfff';
 
-        // Posição aleatória
-        inimigo.style.left = Math.random() * (window.innerWidth - 40) + 'px';
-        inimigo.style.top = Math.random() * (window.innerHeight - 40) + 'px';
+        inimigo.style.left = posX + 'px';
+        inimigo.style.top = posY + 'px';
+
         container.appendChild(inimigo);
         
         intervalo = Math.max(intervaloMin, intervalo * reducao);
-        setTimeout(spawnInimigo,intervalo);
+        setTimeout(spawnInimigo, intervalo);
     }
+
 
     spawnInimigo();
 
