@@ -253,8 +253,8 @@ function comecar() {
                 }, invulTempo);
                 if (vida <= 0) {
                     // morte
-                    alert('Game Over!');
                     window.location.reload();
+                    alert('Game Over!');
                 }
             }
         });
