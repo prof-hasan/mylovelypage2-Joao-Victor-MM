@@ -23,11 +23,11 @@ let dinheiro = 0;//dinheiro gasto fora do jogo
 let Ganhar = 1;//Dinheiro Ganho ao matar um inimigo
 let instUp = 0; //niveis ja ganhos no inicio    
 
-let precos =[50, 20, 100, 100, 90, 200];
-let niveis = [0, 0, 0, 0, 0, 0]; // nível atual de cada upgrade
-let nivelMax = [20, 50, 15, 3, 5, 5]; // nível máximo de cada upgrade
+let precos =[50, 20, 100, 100, 90, 200, 50];
+let niveis = [0, 0, 0, 0, 0, 0, 0]; // nível atual de cada upgrade
+let nivelMax = [20, 50, 15, 3, 5, 5, 10]; // nível máximo de cada upgrade
 const upgrades = document.querySelectorAll('.upgrade'); 
-let tipo = ['Dinheiro ganho', 'Intervalo de Tiro', 'Tempo', 'Tamanho do projetil', 'Itens de Cura', 'Níveis instantâneos'];
+let tipo = ['Dinheiro ganho', 'Intervalo de Tiro', 'Tempo', 'Tamanho do projetil', 'Itens de Cura', 'Níveis instantâneos', "Taxa de XP"];
 
 function aplicarUpgradesSalvos() {
     niveis.forEach((nivel, index) => {
@@ -51,6 +51,9 @@ function aplicarUpgradesSalvos() {
                     break;
                 case 5: // Níveis instantâneos
                     instUp += nivel;
+                    break;
+                case 6:
+                    dropXP += 2 * nivel;
                     break;
             }
         }
@@ -114,6 +117,10 @@ upgrades.forEach((botao, upgrade) => {
                         case 5: // Níveis instantâneos
                             instUp += 1;
                             precos[upgrade] += 400;
+                            break;
+                        case 6:
+                            dropXP += 1;
+                            precos[upgrade] += 100;
                             break;
                     }
 
