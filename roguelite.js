@@ -197,7 +197,7 @@ function comecar() {
     // movimentação
     let posX = window.innerWidth / 2 - 25;
     let posY = window.innerHeight / 2 - 25;
-    let keys = { w: false, a: false, s: false, d: false }; // controle de teclas
+    let keys = { w: false, a: false, s: false, d: false, W: false, A: false, S: false, D: false}; // controle de teclas
     let invulneravel = false;
 
     // Função para atualizar a exibição do XP na tela
@@ -311,10 +311,10 @@ function comecar() {
     function moviment() {
         let dx = 0,
             dy = 0;
-        if (keys.w) dy -= 1;
-        if (keys.s) dy += 1;
-        if (keys.a) dx -= 1;
-        if (keys.d) dx += 1;
+        if (keys.w || keys.W) dy -= 1;
+        if (keys.s || keys.S) dy += 1;
+        if (keys.a || keys.A) dx -= 1;
+        if (keys.d || keys.D) dx += 1;
         if (dx !== 0 || dy !== 0) {
             // movimento diagonal sem aceleração extra
             const len = Math.sqrt(dx * dx + dy * dy);
