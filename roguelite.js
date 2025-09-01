@@ -27,7 +27,7 @@ let precos =[50, 20, 100, 100, 90, 200, 50];
 let niveis = [0, 0, 0, 0, 0, 0, 0]; // nível atual de cada upgrade
 let nivelMax = [20, 50, 15, 3, 5, 5, 10]; // nível máximo de cada upgrade
 const upgrades = document.querySelectorAll('.upgrade'); 
-let tipo = ['Dinheiro ganho', 'Intervalo de Tiro', 'Tempo', 'Tamanho do projetil', 'Itens de Cura', 'Níveis instantâneos', "Taxa de XP"];
+let tipo = ['Dinheiro ganho', 'Intervalo de Tiro', 'Tempo', 'Tamanho do projetil', 'Itens de Cura', 'Níveis instantâneos', 'Taxa de XP'];
 
 function aplicarUpgradesSalvos() {
     niveis.forEach((nivel, index) => {
