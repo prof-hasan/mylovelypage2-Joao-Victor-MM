@@ -681,6 +681,8 @@ function comecar() {
 
     function aleatorizarStatus(){
         let randomizar = Math.floor(Math.random() * 12);
+
+
         switch (randomizar) {
             case 0:
                 vidamax++;
