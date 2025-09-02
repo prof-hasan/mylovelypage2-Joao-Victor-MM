@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Joguinho</title>
+    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="icon" href="imgs/caveiraPixelArt.png">
+</head>
+<body>
+    <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="sobre.html">Sobre</a></li>
+                    <li><a href="roguelikt.html" class="atual">Roguelite</a></li>
+                </ul>
+            </nav>
+    </header>
+
+
+    <main>
+        <h2>Começar jogo?</h2>
+        <button onclick="comecar()">Começar!</button>
+        <p>Em caso de bugs, fale comigo, tentarei arrumar futuramente!</p>
+
+        <h2>Controles</h2>
+        <ul>
+            <li><em>W A S D:</em> Controla o personagem;</li>
+            <li><em>Esc:</em> Abrir menu de Status;</li>
+            <li><em>Botão esquerdo do mouse:</em> Atirar na direção do cursor.</li>
+        </ul>
+
+        <h2>Objetivo</h2>
+        <p>chegue ao final do jogo, zerando o crônometro, a cada minuto, o jogo fica mais difícil, e para superar seu recorde, compre os Upgrades permanentes abaixo:</p>
+
+        <h2>Upgrades:</h2>
+        <div id="upgradesMenu" >
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+            <button class="upgrade" ></button>
+
+            <button class="Resetar" onclick="localStorage.clear(); window.location.reload()">Resetar Progresso</button>
+        </div>
+    </main>
+
+
+    <footer>
+         <p style="margin: 0; font-size: 1em; color: #cea146; text-align: center;">
+            &copy; 2025 João Victor MM &mdash; Projeto para fins educacionais.<br>
+            <a href="https://github.com/Joao-Victor-MM" target="_blank" style="color: #66d9ef; text-decoration: none;">GitHub</a>
+        </p>
+    </footer>
+
+    <script src="roguelite.js"></script>
+</body>
+</html>
